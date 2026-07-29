@@ -204,7 +204,7 @@ Because dynamic types rewrite type-specific header parameters, custom animation 
 
 State reads on characteristic `facebd02` return a maximum payload of **738 bytes**. Although the CBOR property map header declares 28 key-value pairs, only 22 pairs are returned in a standard read payload.
 
-* **MTU Allocation**: Under standard BLE negotiation (ATT_MTU = 247), each GATT read PDU yields up to 246 payload bytes. The firmware limits multi-PDU read responses to 3 PDUs ($3 \times 246 = 738$ bytes).
+* **MTU Allocation**: Under standard BLE negotiation (ATT_MTU = 247), each GATT read PDU yields up to 246 payload bytes. The firmware limits multi-PDU read responses to 3 PDUs (3 x 246 = 738 bytes).
 * **Timing & Service Discovery**: ATT_MTU negotiation completes after GATT service discovery. Measuring payload limits prematurely inside `didConnect` yields pre-negotiation defaults (23 bytes).
 * **Firmware Limit**: The 738-byte boundary is enforced in device firmware and cannot be expanded by central MTU renegotiation.
 
@@ -214,7 +214,7 @@ State reads on characteristic `facebd02` return a maximum payload of **738 bytes
 
 Property writes transmitted to `facebd01` trigger an automatic notification echo on `facebd02`, containing the written property key and timestamp payload:
 
-```json
+```text
 {84: <timestamp>, 79: [1, 23400, 72900], 65: "06 01 11 28"}
 ```
 
