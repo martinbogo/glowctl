@@ -1,0 +1,13 @@
+# Verbatim power-cycle proof, Glowrium-C045, 2026-07-27.
+# Sequence: read state, write off, read state, write on, read state.
+# Only the leading 48 bytes of each 738-byte state read are kept; that prefix
+# carries keys 84, 101, 83, 86-89, 1, 2 and 8, which is all this proves.
+#
+# baseline state (power on)
+state_before: b8 1c 18 54 1b 00 00 01 9f a6 93 01 52 18 65 03 18 53 39 01 df 18 56 f4 18 57 00 18 58 00 18 59 00 01 18 64 02 f5 08 44 46 04 00 32 13 43 01 00 04
+# wrote a1 02 f4 to facebd01, acknowledged by device
+notify_off: a2 18 54 1b 00 00 01 9f a6 93 09 22 02 f4
+state_off: b8 1c 18 54 1b 00 00 01 9f a6 93 11 90 18 65 03 18 53 39 01 df 18 56 f4 18 57 00 18 58 00 18 59 00 01 18 64 02 f4 08 44 46 04 00 32 13 43 01 00 04
+# wrote a1 02 f5 to facebd01, acknowledged by device
+notify_on: a2 18 54 1b 00 00 01 9f a6 93 19 60 02 f5
+state_on: b8 1c 18 54 1b 00 00 01 9f a6 93 21 08 18 65 03 18 53 39 01 df 18 56 f4 18 57 00 18 58 00 18 59 00 01 18 64 02 f5 08 44 46 04 00 32 13 43 01 00 04

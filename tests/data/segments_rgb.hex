@@ -1,0 +1,10 @@
+# Glowrium-C045 set to RGBRGB... top to bottom, captured from hardware 2026-07-27.
+#
+# The lamp was set R,G,B repeating from the TOP. key 22 reads GRBGRB...,
+# which means array index 0 is the BOTTOM segment: array[i] = physical[19-i].
+# 20 slots of 4 bytes = 20 segments of RGBY. Key 22 is spatial, not temporal.
+# brightness (key 1) was 100 decimal; omitted here as this file is hex-only.
+mode: 00 01 00
+segments_key22: 00 ff 00 00 ff 00 00 00 00 00 ff 00 00 ff 00 00 ff 00 00 00 00 00 ff 00 00 ff 00 00 ff 00 00 00 00 00 ff 00 00 ff 00 00 ff 00 00 00 00 00 ff 00 00 ff 00 00 ff 00 00 00 00 00 ff 00 00 ff 00 00 ff 00 00 00 00 00 ff 00 00 ff 00 00 ff 00 00 00
+segment_brightness_key23: 64 64 64 64 64 64 64 64 64 64 64 64 64 64 64 64 64 64 64 64
+colour_key8: 46 00 00 32

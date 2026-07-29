@@ -1,0 +1,15 @@
+# Gradual on/off set to 10 seconds, captured from hardware 2026-07-27.
+# Single variable changed from a clean baseline (all config features off).
+#
+# Exactly one key moved:
+#   key 80: [0, 0] -> [1, 10]
+#
+# So key 80 is [enabled, duration_seconds], matching the [enabled, ...]
+# convention key 77 established for the hourly chime.
+#
+# Key 5 did NOT move, falsifying the prediction that it held the gradual
+# config. Its [0, 0, 1800, 1800] was assumed to be fade ramps because 1800 s
+# is 30 minutes; that association was wrong. Key 5 remains unidentified.
+# key80_before: [0, 0]
+# key80_after: [1, 10]
+# key5_unchanged: [0, 0, 1800, 1800]

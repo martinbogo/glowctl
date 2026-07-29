@@ -1,0 +1,37 @@
+# C045 property table: CBOR integer key -> name and payload size.
+#
+# This is the device's own property model, as used by the BLE protocol.
+# Format: key<TAB>name<TAB>size_bytes<TAB>index
+0	ssid	15	1
+0	ip	16	2
+0	rssi	4	3
+1	Glm	4	11
+2	GPower	1	12
+3	GTime	1	20
+4	GTimeDat0	188	21
+5	GCountdown	16	16
+7	baseAd	4	13
+8	colorMode	4	14
+19	ModeCtr	3	15
+22	Section0	80	17
+23	LmArray	20	18
+24	DyData	100	19
+40	GTimeDat1	188	22
+41	GTimeDat2	188	23
+42	GTimeDat3	188	24
+43	GTimeDat4	188	25
+62	SCfg	102	26
+63	RCfg	102	27
+65	RStime	4	29
+66	preview	4	30
+77	Remind	12	31
+79	RiseSet	12	28
+80	RiseSlow	8	32
+83	timeoffset	4	4
+84	device_time	8	5
+86	dst	1	6
+87	dst_start	8	7
+88	dst_end	8	8
+89	dst_offset	4	9
+101	version	4	0
+125	extra	10	10

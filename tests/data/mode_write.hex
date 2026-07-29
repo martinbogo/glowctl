@@ -1,0 +1,13 @@
+# Writing key 19 (mode) directly, 2026-07-27.
+#
+# The lamp was in music mode. We wrote all_white (00 00 05), then wrote
+# music (02 00 07) back. Both writes were acknowledged at the ATT layer,
+# both produced a change-push notification, and both read back from the
+# state map.
+#
+# BUT NOTHING VISIBLE HAPPENED. Martin was watching and the lamp did not
+# go white. So key 19 stores and reports a mode without repainting the
+# lamp, the same trap key 8 set earlier: acknowledgement is not proof of
+# effect. Only visual confirmation counts for this device.
+notify_after_white: a2 18 54 1b 00 00 01 9f a6 cb 89 5f 13 43 00 00 05
+notify_after_music: a2 18 54 1b 00 00 01 9f a6 cb 9f b9 13 43 02 00 07

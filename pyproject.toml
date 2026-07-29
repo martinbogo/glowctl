@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "glowctl"
+version = "1.0.0"
+description = "Open source BLE control for Glowrium (INLEDCO) LED lamps"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "CC-BY-SA-4.0" }
+keywords = ["glowrium", "inledco", "ble", "bluetooth", "led", "esp32", "iot"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Topic :: Home Automation",
+    "License :: OSI Approved :: Creative Commons Attribution Share Alike 4.0 International",
+    "Operating System :: OS Independent",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "bleak>=0.22",
+    "cbor2>=5.6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-asyncio>=0.23"]
+
+[project.scripts]
+glowctl = "glowctl.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/martinbogo/glowctl"
+Documentation = "https://github.com/martinbogo/glowctl/blob/main/docs/PROTOCOL.md"
+Issues = "https://github.com/martinbogo/glowctl/issues"
+
+[tool.setuptools.package-data]
+glowctl = ["data/*.json", "py.typed"]
+
+[tool.setuptools.packages.find]
+include = ["glowctl*"]

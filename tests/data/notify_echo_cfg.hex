@@ -1,0 +1,15 @@
+# Echoes captured after writing SCfg (62) and RCfg (63), 2026-07-28.
+#
+# Both are 2 config bytes + a 100-byte DyData program, matching the declared
+# 102. We wrote campfire's program so it would be recognisable coming back.
+#
+# THE DEVICE ECHOED 106 BYTES, not the 102 written. It appended four bytes of
+# its own, "40 40 00 7e", so the declared size is the writable portion and the
+# device stores more. Those four bytes are unexplained; they are identical for
+# SCfg and RCfg.
+#
+# Key 65 RStime rode along with both writes, as it did with RiseSet, always
+# reading 06 01 11 28. It is clearly tied to the sunrise/sunset family.
+scfg_echo_tail: 40 40 00 7e
+rcfg_echo_tail: 40 40 00 7e
+rstime: 06 01 11 28

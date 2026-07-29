@@ -1,0 +1,10 @@
+# Glowrium-C045 set to solid RED, captured from hardware 2026-07-27.
+# The displayed colour is NOT in key 8, which did not move. It is in
+# key 22: all 20 program steps set to ff 00 00 00.
+# So key 22 is the active lighting program, not a sunrise table, and a
+# solid colour is simply every step holding the same RGBY value.
+mode: 00 00 06
+colour_key8: 46 00 00 32
+program_key22: ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00
+step_brightness_key23: 64 64 64 64 64 64 64 64 64 64 64 64 64 64 64 64 64 64 64 64
+brightness: 100

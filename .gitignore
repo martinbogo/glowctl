@@ -1,0 +1,16 @@
+# Build output
+*.o
+
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
+
+# pytest
+.pytest_cache/
+
+# build artifacts
+*.egg-info/
+build/
+dist/
