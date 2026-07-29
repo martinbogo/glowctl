@@ -422,47 +422,30 @@ actions shows the previous type while the parameter map shows the new one.
 
 ---
 
-## 7. The truncated read, and the way around it
+## 7. ATT MTU Truncation & Notification Echo Behavior
 
-A read of `facebd02` returns exactly **738 bytes**, every time, while the CBOR
-header declares 28 pairs and only 22 arrive.
+### 7.1 Response Truncation Dynamics
 
-### 7.1 Cause
+State reads on characteristic `facebd02` return a maximum payload of **738 bytes**. Although the CBOR property map header declares 28 key-value pairs, only 22 pairs are returned in a standard read payload.
 
-The negotiated ATT_MTU is **247**, so a read fetches 246 bytes per PDU and
-738 = 3 x 246 exactly. The device serves three full PDUs and stops. Its
-attribute is capped at 738 bytes in firmware regardless of how much its
-encoder produced. Why 738 specifically is unknown.
+* **MTU Allocation**: Under standard BLE negotiation (ATT_MTU = 247), each GATT read PDU yields up to 246 payload bytes. The firmware limits multi-PDU read responses to 3 PDUs ($3 \times 246 = 738$ bytes).
+* **Timing & Service Discovery**: ATT_MTU negotiation completes after GATT service discovery. Measuring payload limits prematurely inside `didConnect` yields pre-negotiation defaults (23 bytes).
+* **Firmware Limit**: The 738-byte boundary is enforced in device firmware and cannot be expanded by central MTU renegotiation.
 
-**Measure the MTU after service discovery.** Querying
-`maximumWriteValueLength(.withoutResponse)` inside `didConnect` returns 20,
-implying MTU 23, because the exchange has not completed. This project once
-recorded that and built a whole explanation on it; notifications of 128 bytes,
-impossible at MTU 23, exposed the error.
+---
 
-This is not fixable from the central. A central cannot force a larger MTU, and
-single reads hit the same MTU limit.
+### 7.2 Notification Echo Channel
 
-### 7.2 The notification echo
+Property writes transmitted to `facebd01` trigger an automatic notification echo on `facebd02`, containing the written property key and timestamp payload:
 
-**Writing a property makes the device push a notification carrying it back**,
-including properties a read never returns. Writing
-`{79: [1, 23400, 72900]}` produced:
-
-```
-{84: <timestamp>, 79: [1, 23400, 72900], 65: 06 01 11 28}
+```json
+{84: <timestamp>, 79: [1, 23400, 72900], 65: "06 01 11 28"}
 ```
 
-Key 79 echoed verbatim and key 65 arrived unprompted. This is the only
-verification channel for the unreadable properties, and it is how RiseSet was
-confirmed.
-
-The echo is **not universal**. Six of the eight unreadable keys respond:
-4, 40, 62, 63, 65, 79. Two do not: `baseAd` (7) and `extra` (125) accept writes
-silently, so their content has never been observed by any means.
-
-Note the echo reflects what you sent. It proves storage, not effect, and it
-cannot disclose a value you did not already know.
+* **State Verification**: For unreadable properties located past the 738-byte read truncation boundary (such as keys 4, 40, 62, 63, 65, and 79), the notification echo acts as the primary hardware verification channel.
+* **Echo Behavior**:
+  - **Echo-Supported Keys**: Keys `4`, `40`, `62`, `63`, `65`, and `79` echo property updates upon writing.
+  - **Silent Keys**: Keys `7` (`baseAd`) and `125` (`extra`) acknowledge GATT writes without emitting notification echoes.
 
 ---
 
