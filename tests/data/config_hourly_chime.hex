@@ -1,0 +1,37 @@
+# Hourly Chime toggled ON, captured from hardware 2026-07-27.
+# Diff against a clean baseline where every config key was 0/false.
+#
+# Exactly two keys moved:
+#   key 66: 0 -> 1
+#   key 77: [0, 21600, 64800] -> [1, 21600, 64800]
+#
+# Key 77 is therefore [enabled, start_seconds, end_seconds] for the chime,
+# and the times match the 06:00 / 18:00 limits shown in the app. An earlier
+# guess that key 77 was sunrise/sunset was wrong: those times were defaults.
+# Stored as decoded values rather than hex, since these are CBOR arrays.
+# key66_before: 0
+# key66_after: 1
+# key77_before: [0, 21600, 64800]
+# key77_after: [1, 21600, 64800]
+#
+# Follow-up: the chime was then disabled and sunrise/sunset enabled instead.
+#   key 77: [1, 21600, 64800] -> [0, 21600, 64800]   (chime enable, both ways)
+#   key 66: 1 -> 1                                    (unchanged)
+#
+# Two conclusions:
+#  1. key 66 is not chime-specific, since disabling the chime left it at 1.
+#     Consistent with a count of enabled config features.
+#  2. Sunrise/sunset produced NO visible change whatsoever. The app took a
+#     location and computed real times, and none of them appear in any of the
+#     22 readable properties. Portland's actual sunrise/sunset (~05:50, ~20:45)
+#     are absent; only the round 06:00/18:00 chime defaults are present.
+#     That config lives in the 6 properties the truncated read never returns.
+#
+# Final round: sunrise/sunset disabled, returning every config feature to off.
+#   key 66: 1 -> 1   PREDICTION WAS 0. Counter hypothesis falsified.
+#   nothing else changed.
+#
+# key 66 latched 0 -> 1 on the first config change and has ignored four
+# subsequent ones, including a full return to baseline. Sticky, not counting.
+#
+# Disabling sunrise/sunset was also invisible, matching enabling it.

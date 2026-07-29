@@ -1,0 +1,84 @@
+name: Sync Documentation to GitHub Wiki
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'README.md'
+      - '.github/workflows/wiki_sync.yml'
+  workflow_dispatch:
+
+jobs:
+  sync-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Checkout GitHub Wiki Repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}.wiki
+          path: wiki
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Copy & Map Documentation Files
+        run: |
+          # Copy docs to wiki mapping
+          cp docs/PROTOCOL.md wiki/Protocol-Specification.md
+          cp docs/INTEGRATION_AND_SCENES.md wiki/Integration-and-Scenes.md
+          cp docs/CLI_REFERENCE.md wiki/CLI-Reference.md
+
+          # Generate Home.md
+          cat << 'EOF' > wiki/Home.md
+          # Glowctl Wiki
+
+          Welcome to the **glowctl** documentation wiki!
+
+          `glowctl` is an open-source Python library and command-line interface for controlling **Glowrium** (INLEDCO) LED floor lamps over Bluetooth Low Energy (BLE).
+
+          ---
+
+          ## Documentation Index
+
+          - **[[Protocol Specification|Protocol-Specification]]**: Wire protocol specification, CBOR property maps, GATT layout, and firmware quirks.
+          - **[[Integration and Scenes|Integration-and-Scenes]]**: Developer guide for Python library integration, device settings API, and custom dynamic scene synthesis (`build_dydata`).
+          - **[[CLI Reference|CLI-Reference]]**: Complete `glowctl` command-line reference and `--fast` performance options.
+
+          ---
+
+          ## Hardware Architecture Summary
+
+          * **Target Device**: Glowrium-C045 (ESP32 SoC)
+          * **Lighting Array**: 20 vertically addressable segments, 4-channel per-segment RGBY emitters (Red, Green, Blue, Yellow).
+          * **BLE Service**: GATT Service `facebd00-7261-6262-6974-696f74626c65` (Write: `facebd01`, Read/Notify: `facebd02`).
+
+          ---
+
+          ## Quick Links
+
+          - [GitHub Main Repository](https://github.com/martinbogo/glowctl)
+          EOF
+
+          # Generate _Sidebar.md
+          cat << 'EOF' > wiki/_Sidebar.md
+          * **[[Home]]**
+          * **[[Protocol Specification|Protocol-Specification]]**
+          * **[[Integration and Scenes|Integration-and-Scenes]]**
+          * **[[CLI Reference|CLI-Reference]]**
+          EOF
+
+      - name: Commit and Push to Wiki
+        run: |
+          cd wiki
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          if git diff --staged --quiet; then
+            echo "No wiki changes to commit."
+          else
+            git commit -m "Auto-sync documentation from main branch"
+            git push origin master
+          fi

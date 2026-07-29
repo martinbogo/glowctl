@@ -1,0 +1,18 @@
+# Per-segment write verified on hardware, 2026-07-27.
+#
+# BEFORE: initial baseline set to all bright white, which is RGBY
+# (255,255,255,200) on all 20 segments. Note Y is 200, not 255.
+#
+# We then wrote ONLY key 22 with four bands, top to bottom:
+# 5 red, 5 green, 5 blue, 5 yellow. It rendered exactly as intended
+# and was confirmed visually.
+#
+# Two things this establishes:
+#  1. key 22 renders on its own; no mode write is needed. Mode held
+#     at 00 00 05 across the write.
+#  2. the bottom-to-top storage order is right. Had it been wrong,
+#     the bands would have appeared mirrored.
+mode_before: 00 00 05
+segments_before: ff ff ff c8 ff ff ff c8 ff ff ff c8 ff ff ff c8 ff ff ff c8 ff ff ff c8 ff ff ff c8 ff ff ff c8 ff ff ff c8 ff ff ff c8 ff ff ff c8 ff ff ff c8 ff ff ff c8 ff ff ff c8 ff ff ff c8 ff ff ff c8 ff ff ff c8 ff ff ff c8 ff ff ff c8 ff ff ff c8
+mode_after: 00 00 05
+segments_after: 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00 ff 00 00 00

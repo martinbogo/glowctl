@@ -1,0 +1,11 @@
+# Glowrium-C045 state while in colour-cycling mode, 2026-07-27.
+# Captured after pressing the physical mode switch. Two reads 4s apart.
+# Compared against the white-mode run, the ONLY structural change was
+# key 19: 01 00 04 -> 01 00 00. Brightness, power, and all other keys
+# held. That is what identifies key 19 byte 3 as the mode selector.
+#
+# Between the two reads, only the timestamp moved: the cycling animation
+# runs on-device and is NOT reflected in key 8, so key 8 is the stored
+# manual colour rather than live output.
+cycling_t0: b8 1c 18 54 1b 00 00 01 9f a6 b5 71 09 18 65 03 18 53 39 01 df 18 56 f4 18 57 00 18 58 00 18 59 00 01 18 64 02 f5 08 44 46 00 00 32 13 43 01 00 00 16 58 50
+cycling_t4: b8 1c 18 54 1b 00 00 01 9f a6 b5 84 91 18 65 03 18 53 39 01 df 18 56 f4 18 57 00 18 58 00 18 59 00 01 18 64 02 f5 08 44 46 00 00 32 13 43 01 00 00 16 58 50

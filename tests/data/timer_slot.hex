@@ -1,0 +1,31 @@
+# Timer slots captured after setting three timers at 03:07, 11:22 and 19:45,
+# Glowrium-C045, 2026-07-28.
+#
+# The app fills slots in order, so only the THIRD timer landed in a readable
+# slot. GTimeDat0 (key 4) and GTimeDat1 (key 40) hold 03:07 and 11:22 and are
+# never returned by a read.
+#
+# GTimeDat2 (key 41) holds 19:45. Byte 1 = 19 and byte 2 = 45 decode the time
+# exactly, which is what identifies the layout. GTimeDat3/4 are empty and give
+# the baseline to diff against.
+#
+# Only the 12-byte config prefix is stored here; the 100-byte DyData program
+# that follows it is covered by other fixtures.
+slot2_enabled_1945: 80 13 2d 01 64 64 08 1e 00 00 80 00
+slot3_empty: 00 00 1e 00 64 64 08 1e 00 00 00 00
+slot4_empty: 00 00 1e 00 64 64 08 1e 00 00 00 00
+#
+# Follow-up 1: the 19:45 timer was changed to repeat=daily, action=off.
+#   byte 0:  0x80 -> 0xff    enable bit plus a WEEKDAY BITMASK.
+#                            once = 0x80 (enabled, no days)
+#                            daily = 0xff (enabled, all seven bits)
+#   byte 3:  1 -> 0          action: 1 = on, 0 = off
+#   byte 5:  100 -> 101      unexplained
+#   byte 10 stayed 0x80, so it is NOT the repeat rule.
+#
+# Byte 0 packs the enable bit together with a weekday bitmask.
+slot2_daily_off: ff 13 2d 00 64 65 08 1e 00 00 80 00
+#
+# Follow-up 2: a timer built entirely in Python and written to slot 2,
+# 06:53, weekdays only (0x1f), action on. Read back byte-for-byte.
+slot2_written_0653_weekdays: 9f 06 35 01 64 65 08 1e 00 00 80 00

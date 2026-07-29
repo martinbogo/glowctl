@@ -1,0 +1,70 @@
+# C045 mode table: identifier -> display name.
+#
+# 27 modes carry an explicit numeric index (mode_N); the rest are keyed by
+# name, and 14 are music sub-modes. These identify the lamp's built-in
+# effects. Applying one requires its program, which must be captured from
+# the device (see `glowctl capture-mode`).
+#
+# Format: index_or_dash<TAB>key<TAB>display_name
+1	c045_modes_item_mode_1	Rainbow Clouds
+2	c045_modes_item_mode_2	Ocean Blue
+3	c045_modes_item_mode_3	Flowing Rainbow
+4	c045_modes_item_mode_4	Rainbow Pulse
+5	c045_modes_item_mode_5	Rainbow Expansion
+6	c045_modes_item_mode_6	Colored Clouds Float
+7	c045_modes_item_mode_7	Pulsing Clouds
+8	c045_modes_item_mode_8	Flowing Clouds
+9	c045_modes_item_mode_9	Segmental Beat
+10	c045_modes_item_mode_10	Marquee Segments
+11	c045_modes_item_mode_11	Torch
+12	c045_modes_item_mode_12	Sea Flow
+13	c045_modes_item_mode_13	Campfire
+14	c045_modes_item_mode_14	Birthday
+15	c045_modes_item_mode_15	Candle
+16	c045_modes_item_mode_16	New Year
+17	c045_modes_item_mode_17	Christmas Tree
+18	c045_modes_item_mode_18	Snowflakes
+19	c045_modes_item_mode_19	Sleep Aid
+20	c045_modes_item_mode_20	Wake-Up
+21	c045_modes_item_mode_21	Independence Day
+22	c045_modes_item_mode_22	Easter
+23	c045_modes_item_mode_23	Father’s Day
+24	c045_modes_item_mode_24	Black Friday
+25	c045_modes_item_mode_25	St. Patrick’s Day
+26	c045_modes_item_mode_26	Carnival
+27	c045_modes_item_mode_27	Labor Day
+-	c045_modes_item_aurora	Aurora
+-	c045_modes_item_autumn	Golden Fall
+-	c045_modes_item_blue_cloud	Blue Sky
+-	c045_modes_item_building_block	Blocks
+-	c045_modes_item_christmas	Christmas
+-	c045_modes_item_dye	Emission
+-	c045_modes_item_flex_1	Glowing Purple
+-	c045_modes_item_flex_2	Dynamic
+-	c045_modes_item_hallowmas	Halloween
+-	c045_modes_item_horse_1	Red-Green Waves
+-	c045_modes_item_horse_2	Twilight
+-	c045_modes_item_mother_day	Mother’s Day
+-	c045_modes_item_music_1	Rock
+-	c045_modes_item_music_10	Joyful
+-	c045_modes_item_music_11	Colorful
+-	c045_modes_item_music_12	Gentle
+-	c045_modes_item_music_13	派对
+-	c045_modes_item_music_14	舞会
+-	c045_modes_item_music_2	LightMusic
+-	c045_modes_item_music_3	Piano
+-	c045_modes_item_music_4	Rhythm
+-	c045_modes_item_music_5	Beat
+-	c045_modes_item_music_6	Fireworks
+-	c045_modes_item_music_7	Hopping
+-	c045_modes_item_music_8	Sprouting
+-	c045_modes_item_music_9	Rainbow
+-	c045_modes_item_rainbow_1	Rainbow
+-	c045_modes_item_rainbow_2	Morning Sun
+-	c045_modes_item_sunglow	Twilight Purple
+-	c045_modes_item_sunrise	Sunrise
+-	c045_modes_item_sunrise_water	Sunrise Drip
+-	c045_modes_item_sunset	Sunset
+-	c045_modes_item_thanksgiving	Thanksgiving
+-	c045_modes_item_valentine_day	Valentine’s Day
+-	c045_modes_item_white_sky	Blue Cloud

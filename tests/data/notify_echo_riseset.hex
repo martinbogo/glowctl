@@ -1,0 +1,13 @@
+# Notification received after writing RiseSet (key 79), 2026-07-28.
+#
+# This is the workaround for the truncated read. Writing a property makes the
+# device push a notification carrying that property's value back, INCLUDING
+# properties a state read never returns.
+#
+# Here we wrote {79: [1, 23400, 72900]} = enabled, 06:30, 20:15, and the device
+# echoed key 79 verbatim. It also volunteered key 65 (RStime), another property
+# that no read has ever returned.
+#
+# Both 79 and 65 are in const.NEVER_READ, so this channel reaches data the read
+# path cannot.
+riseset_echo: a3 18 54 1b 00 00 01 9f a9 94 5b d7 18 4f 83 01 19 5b 68 1a 00 01 1c c4 18 41 44 06 01 11 28

@@ -1,0 +1,1 @@
+brand:GLOWRIUM;pkey:Glowrium-C045;subid:1;devid:ESP-8856A6F2364C;mac:8856A6F2364C;version:3;;

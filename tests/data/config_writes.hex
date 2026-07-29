@@ -1,0 +1,21 @@
+# Tier 1 and 2 config writes, verified on hardware 2026-07-27.
+# Each was written to facebd01 and read back from facebd02.
+#
+#   key 77 Remind      [0, 21600, 64800] -> [1, 26100, 81600]   EXACT
+#   key 80 RiseSlow    [0, 10]           -> [1, 25]             EXACT
+#   key  5 GCountdown  [0, 0, 1800, 1800] -> [1, 0, 600, 594]   see below
+#   key 79 RiseSet     accepted, NOT READABLE, unverified
+#
+# GCountdown was written as [1, 0, 600, 600] and read back as
+# [1, 0, 600, 594] a few seconds later: element 3 is the live remaining
+# time, ticking down on the device. That is behavioural evidence the lamp
+# is processing the value, not just storing it, which makes countdown the
+# best-evidenced of the readback-only group.
+#
+# CAVEAT that keeps these honest: key 8 also read back byte-exact and
+# rendered nothing. Readback proves storage, not effect. Only power,
+# brightness and segments have been confirmed by SEEING the lamp change.
+chime_frame: a1 18 4d 83 01 19 65 f4 1a 00 01 3e c0
+gradual_frame: a1 18 50 82 01 18 19
+countdown_frame: a1 05 84 01 00 19 02 58 19 02 58
+riseset_frame: a1 18 4f 83 01 19 54 60 1a 00 01 27 50

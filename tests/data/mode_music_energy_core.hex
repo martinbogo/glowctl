@@ -1,0 +1,14 @@
+# Glowrium-C045 in music-reactive 'energy core' mode, 2026-07-27.
+# The microphone is ON THE LAMP: it reacts to ambient sound with no
+# phone involvement, so no audio or frame data crosses BLE.
+#
+# Three reads ~3s apart while it was actively reacting to sound differ
+# ONLY in the timestamp. key 22 holds the mode's colour palette, not
+# live output, so a real-time visualiser cannot be built from reads.
+#
+# key 19 = 02 00 07. First byte 0x02 had never been seen before; every
+# prior mode used 0x00 or 0x01.
+mode: 02 00 07
+segments_key22: ff 00 ff 00 ff 00 ff 00 ca 12 ff 22 82 2a ff 52 3e 46 ff 7a 26 8e ff 4a 0e d6 ff 1a 06 ee ff 0a 12 c8 ff 24 1f a1 ff 3e 2c 7c ff 56 39 55 ff 70 50 3a ff 74 77 2d ff 5a 9d 21 ff 40 c4 14 ff 26 e9 07 ff 0e ff 00 ff 00 ff 00 ff 00 ff 00 ff 00
+key8: 46 00 00 01
+key23: 64 64 64 64 64 64 64 64 64 64 64 64 64 64 64 64 64 64 64 64
