@@ -122,7 +122,9 @@ Key 22 contains an 80-byte binary payload structured as **20 spatial segments**,
 * **4-Channel RGBY Emitters**: Each segment features dedicated Red, Green, Blue, and Yellow LED emitters. Pure white luminance is driven by `(255, 255, 255, 200)` to preserve dedicated yellow emitter balance.
 * **Physical Memory Mapping**: Segment data is stored bottom-first in physical memory. Array index `0` corresponds to the physical bottom segment of the column:
 
-$$\text{array}[i] = \text{physical\_from\_top}[19 - i]$$
+```text
+array[i] = physical_from_top[19 - i]
+```
 
 High-level library helpers accept top-to-bottom segment arrays and execute internal byte reversing to match user mental models.
 
