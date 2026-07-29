@@ -2,7 +2,6 @@
 
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
-[![Tests](https://img.shields.io/badge/tests-110%20passed-brightgreen.svg)](https://github.com/martinbogo/glowctl/actions/workflows/test.yml)
 
 `glowctl` is an open-source Python library and command-line interface for controlling **Glowrium** (INLEDCO) LED floor lamps over Bluetooth Low Energy (BLE).
 
