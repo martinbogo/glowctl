@@ -225,6 +225,11 @@ def encode_solid(red: int, green: int, blue: int, yellow: int = 0) -> bytes:
     return encode_segments([(red, green, blue, yellow)] * const.SEGMENT_COUNT)
 
 
+def encode_aurora() -> bytes:
+    """Build a key 22 payload representing an Aurora Borealis spatial color gradient."""
+    return encode_segments(const.AURORA_GRADIENT)
+
+
 def parse_identity(data: bytes) -> dict[str, str]:
     """Parse the semicolon-delimited identity string from the info characteristic.
 

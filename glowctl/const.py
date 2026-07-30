@@ -74,6 +74,40 @@ CHANNEL_COUNT = len(CHANNELS)
 # lamp rather than the animation it looks like when read as a time series.
 SEGMENT_COUNT = 20
 
+# 20-segment spatial gradient for Aurora Borealis (top to bottom)
+AURORA_GRADIENT = [
+    (200, 0, 30, 0),    # Top: High-altitude Red/Crimson
+    (180, 0, 50, 0),
+    (150, 0, 90, 0),
+    (100, 0, 150, 0),   # Mid-upper: Violet/Purple transition
+    (50, 20, 180, 0),
+    (0, 100, 200, 0),
+    (0, 200, 100, 0),   # Mid-lower: Emerald Green
+    (0, 255, 50, 0),
+    (0, 255, 30, 0),
+    (0, 255, 20, 0),
+    (0, 255, 10, 0),
+    (0, 230, 20, 0),
+    (0, 200, 40, 0),
+    (30, 180, 80, 0),
+    (80, 120, 120, 0),  # Bottom: Low-altitude Pink/Magenta fringe
+    (150, 50, 150, 0),
+    (200, 20, 180, 0),
+    (220, 10, 150, 0),
+    (255, 0, 120, 0),
+    (255, 0, 100, 0),
+]
+
+# Named color presets mapping color names to top-to-bottom 20-segment RGBY tuples
+NAMED_COLORS = {
+    "red": [(255, 0, 0, 0)] * SEGMENT_COUNT,
+    "green": [(0, 255, 0, 0)] * SEGMENT_COUNT,
+    "blue": [(0, 0, 255, 0)] * SEGMENT_COUNT,
+    "yellow": [(0, 0, 0, 255)] * SEGMENT_COUNT,
+    "white": [(255, 255, 255, 200)] * SEGMENT_COUNT,
+    "aurora": AURORA_GRADIENT,
+}
+
 
 def segment_index_from_top(position: int) -> int:
     """Map a 0-based segment counted from the top to its array index.

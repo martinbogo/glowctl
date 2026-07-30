@@ -97,3 +97,20 @@ def test_fast_mode_bypasses_readback_sleep(mock_transport):
     # Fast mode should NOT call read_state
     cli.main(["--fast", "on"])
     transport.read_state.assert_not_called()
+
+
+def test_fast_mode_color_aurora(mock_transport):
+    transport, _ = mock_transport
+    transport.send_properties.return_value = b"\xa1\x16..."
+
+    start = time.perf_counter()
+    res = cli.main(["--fast", "color", "aurora"])
+    elapsed = time.perf_counter() - start
+
+    assert res == 0
+    assert elapsed < 0.1
+    expected_segments = protocol.encode_aurora()
+    transport.send_properties.assert_called_once_with({
+        const.KEY_MODE: const.MODE_VALUES["segments"],
+        const.KEY_SEGMENTS: expected_segments,
+    }, allow_unsafe=False)

@@ -35,6 +35,8 @@ glowctl --fast on                 # Fire-and-forget sub-500ms power on
 glowctl brightness 75             # Set global luminance (0-100)
 glowctl color 255 0 0             # Set all segments to RGB (Yellow default 0)
 glowctl color 255 128 0 100       # Set explicit Red, Green, Blue, Yellow channels
+glowctl color aurora              # Apply 20-segment Aurora Borealis spatial gradient
+glowctl color red                 # Apply named color preset (red, green, blue, yellow, white, aurora)
 ```
 
 ---

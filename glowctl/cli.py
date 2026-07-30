@@ -303,22 +303,29 @@ async def cmd_brightness(args) -> int:
 
 
 async def cmd_color(args) -> int:
-    vals = [int(v) for v in args.values]
-    while len(vals) < const.CHANNEL_COUNT:
-        vals.append(0)
-    if any(not 0 <= v <= 255 for v in vals):
-        print("each channel must be 0-255", file=sys.stderr)
-        return 2
-    # Paint every segment AND switch to solid mode. Without the mode change a
-    # running animation owns Section0 and repaints it every frame, so a static
-    # colour is overwritten within milliseconds and the readback shows the
-    # animation's own output instead.
-    payload = protocol.encode_solid(*vals[:const.CHANNEL_COUNT])
+    if len(args.values) == 1 and args.values[0].lower() in const.NAMED_COLORS:
+        name = args.values[0].lower()
+        segment_colors = const.NAMED_COLORS[name]
+        payload = protocol.encode_segments(segment_colors)
+        target_mode = const.MODE_VALUES["segments"] if name == "aurora" else const.MODE_VALUES["solid"]
+    else:
+        try:
+            vals = [int(v) for v in args.values]
+        except ValueError:
+            valid_names = ", ".join(sorted(const.NAMED_COLORS))
+            print(f"invalid color: {args.values[0]!r}. Use numeric RGBY values (0-255) or named color: {valid_names}", file=sys.stderr)
+            return 2
+        while len(vals) < const.CHANNEL_COUNT:
+            vals.append(0)
+        if any(not 0 <= v <= 255 for v in vals):
+            print("each channel must be 0-255", file=sys.stderr)
+            return 2
+        payload = protocol.encode_solid(*vals[:const.CHANNEL_COUNT])
+        target_mode = const.MODE_VALUES["solid"]
+
     props = {}
     if not args.keep_mode:
-        # Mode first: applied after the colour, the mode change repaints
-        # Section0 and throws the colour away.
-        props[const.KEY_MODE] = const.MODE_VALUES["solid"]
+        props[const.KEY_MODE] = target_mode
     props[const.KEY_SEGMENTS] = payload
     return await _apply(args, props)
 
