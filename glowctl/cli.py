@@ -494,55 +494,58 @@ async def cmd_raw(args) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
+    parent_p = argparse.ArgumentParser(add_help=False)
+    parent_p.add_argument("-d", "--debug", action="store_true", default=argparse.SUPPRESS,
+                          help="show the lamp found, the frame sent, and readbacks")
+    parent_p.add_argument("-v", "--verbose", action="store_true", default=argparse.SUPPRESS,
+                          help="library logging as well as --debug output")
+    parent_p.add_argument("--address", default=argparse.SUPPRESS, help="BLE address/UUID, skipping the scan")
+    parent_p.add_argument("--scan", dest="scan_first", action="store_true", default=argparse.SUPPRESS,
+                          help="force BLE scan instead of using cached device address")
+    parent_p.add_argument("--fast", "--no-wait", action="store_true", default=argparse.SUPPRESS,
+                          help="fire-and-forget mode; return immediately after write ACK")
+    parent_p.add_argument("--slow-verify", action="store_true", default=argparse.SUPPRESS,
+                          help="use conservative 2-3s readback verification delays")
+    parent_p.add_argument("--timeout", type=float, default=10.0,
+                          help="scan timeout in seconds (default 10)")
+    parent_p.add_argument("--unsafe", action="store_true", default=argparse.SUPPRESS,
+                          help="permit writing properties whose meaning is unconfirmed")
+
     p = argparse.ArgumentParser(
         prog="glowctl",
         description="Open source control for Glowrium LED lamps.",
+        parents=[parent_p],
     )
-    p.add_argument("-d", "--debug", action="store_true",
-                   help="show the lamp found, the frame sent, and readbacks")
-    p.add_argument("-v", "--verbose", action="store_true",
-                   help="library logging as well as --debug output")
-    p.add_argument("--address", help="BLE address/UUID, skipping the scan")
-    p.add_argument("--scan", dest="scan_first", action="store_true",
-                   help="force BLE scan instead of using cached device address")
-    p.add_argument("--fast", "--no-wait", action="store_true",
-                   help="fire-and-forget mode; return immediately after write ACK")
-    p.add_argument("--slow-verify", action="store_true",
-                   help="use conservative 2-3s readback verification delays")
-    p.add_argument("--timeout", type=float, default=10.0,
-                   help="scan timeout in seconds (default 10)")
-    p.add_argument("--unsafe", action="store_true",
-                   help="permit writing properties whose meaning is unconfirmed")
     sub = p.add_subparsers(dest="command", required=True)
 
-    s = sub.add_parser("scan", help="find advertising Glowrium lamps")
+    s = sub.add_parser("scan", parents=[parent_p], help="find advertising Glowrium lamps")
     s.set_defaults(func=cmd_scan)
 
-    s = sub.add_parser("info", help="identity, version, and GATT layout")
+    s = sub.add_parser("info", parents=[parent_p], help="identity, version, and GATT layout")
     s.set_defaults(func=cmd_info)
 
-    s = sub.add_parser("state", help="read and decode the property map")
+    s = sub.add_parser("state", parents=[parent_p], help="read and decode the property map")
     s.add_argument("--programs", action="store_true",
                    help="also expand the RGBY step programs")
     s.set_defaults(func=cmd_state)
 
-    s = sub.add_parser("segments", help="show each segment's colour")
+    s = sub.add_parser("segments", parents=[parent_p], help="show each segment's colour")
     s.set_defaults(func=cmd_segments)
 
-    s = sub.add_parser("watch", help="stream status notifications")
+    s = sub.add_parser("watch", parents=[parent_p], help="stream status notifications")
     s.add_argument("--listen", type=float, default=30.0)
     s.set_defaults(func=cmd_watch)
 
-    s = sub.add_parser("on", help="turn the lamp on")
+    s = sub.add_parser("on", parents=[parent_p], help="turn the lamp on")
     s.set_defaults(func=cmd_power, on=True)
-    s = sub.add_parser("off", help="turn the lamp off")
+    s = sub.add_parser("off", parents=[parent_p], help="turn the lamp off")
     s.set_defaults(func=cmd_power, on=False)
 
-    s = sub.add_parser("brightness", help="set brightness 0-100")
+    s = sub.add_parser("brightness", parents=[parent_p], help="set brightness 0-100")
     s.add_argument("level")
     s.set_defaults(func=cmd_brightness)
 
-    s = sub.add_parser("color", help="set RGBY channels, 0-255 each")
+    s = sub.add_parser("color", parents=[parent_p], help="set RGBY channels, 0-255 each")
     s.add_argument("values", nargs="+", metavar="N",
                    help="red green blue [yellow]")
     s.add_argument("--keep-mode", action="store_true",
@@ -550,31 +553,31 @@ def build_parser() -> argparse.ArgumentParser:
                         "overwrite the colour")
     s.set_defaults(func=cmd_color)
 
-    s = sub.add_parser("chime", help="hourly chime on/off and its active window")
+    s = sub.add_parser("chime", parents=[parent_p], help="hourly chime on/off and its active window")
     s.add_argument("state", choices=["on", "off"])
     s.add_argument("--start", default="06:00", metavar="HH:MM")
     s.add_argument("--end", default="18:00", metavar="HH:MM")
     s.set_defaults(func=cmd_chime)
 
-    s = sub.add_parser("gradual", help="fade duration for on/off transitions")
+    s = sub.add_parser("gradual", parents=[parent_p], help="fade duration for on/off transitions")
     s.add_argument("state", choices=["on", "off"])
     s.add_argument("--seconds", type=int, default=10)
     s.set_defaults(func=cmd_gradual)
 
-    s = sub.add_parser("countdown", help="countdown timer in seconds (0 disables)")
+    s = sub.add_parser("countdown", parents=[parent_p], help="countdown timer in seconds (0 disables)")
     s.add_argument("seconds", type=int)
     s.set_defaults(func=cmd_countdown)
 
-    s = sub.add_parser("sunrise", help="sunrise/sunset schedule")
+    s = sub.add_parser("sunrise", parents=[parent_p], help="sunrise/sunset schedule")
     s.add_argument("state", choices=["on", "off"])
     s.add_argument("--rise", default="06:00", metavar="HH:MM")
     s.add_argument("--set", dest="set", default="18:00", metavar="HH:MM")
     s.set_defaults(func=cmd_sunrise)
 
-    s = sub.add_parser("timers", help="show the timer slots")
+    s = sub.add_parser("timers", parents=[parent_p], help="show the timer slots")
     s.set_defaults(func=cmd_timers)
 
-    s = sub.add_parser("timer", help="write a timer into a slot")
+    s = sub.add_parser("timer", parents=[parent_p], help="write a timer into a slot")
     s.add_argument("slot", type=int, help="0-4; slots 0 and 1 cannot be read back")
     s.add_argument("time", metavar="HH:MM")
     s.add_argument("--action", choices=["on", "off"], default="on")
@@ -583,18 +586,18 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--disable", action="store_true", help="clear the enable bit")
     s.set_defaults(func=cmd_timer)
 
-    s = sub.add_parser("mode", help="apply a captured mode ('list' to see them)")
+    s = sub.add_parser("mode", parents=[parent_p], help="apply a captured mode ('list' to see them)")
     s.add_argument("name")
     s.set_defaults(func=cmd_mode)
 
-    s = sub.add_parser("capture-mode",
+    s = sub.add_parser("capture-mode", parents=[parent_p],
                        help="save the mode the lamp is showing right now")
     s.add_argument("name")
     s.add_argument("--index", type=int, default=None)
     s.add_argument("--display", default=None)
     s.set_defaults(func=cmd_capture_mode)
 
-    s = sub.add_parser("raw", help="send a raw hex frame")
+    s = sub.add_parser("raw", parents=[parent_p], help="send a raw hex frame")
     s.add_argument("hex", help='e.g. "a1 02 f5"')
     s.add_argument("--char", default="facebd01")
     s.add_argument("--response", action="store_true")
@@ -606,6 +609,18 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    for attr, default_val in [
+        ("debug", False),
+        ("verbose", False),
+        ("fast", False),
+        ("unsafe", False),
+        ("timeout", 10.0),
+        ("address", None),
+        ("scan_first", False),
+    ]:
+        if not hasattr(args, attr):
+            setattr(args, attr, default_val)
+
     if args.verbose:
         args.debug = True
     _log_setup(args.verbose)

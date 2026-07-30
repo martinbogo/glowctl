@@ -114,3 +114,13 @@ def test_fast_mode_color_aurora(mock_transport):
         const.KEY_MODE: const.MODE_VALUES["segments"],
         const.KEY_SEGMENTS: expected_segments,
     }, allow_unsafe=False)
+
+
+def test_trailing_fast_argument_position(mock_transport):
+    transport, _ = mock_transport
+    transport.send_properties.return_value = b"\xa1\x16..."
+
+    # Ensure flags typed AFTER the subcommand (e.g. glowctl color aurora --fast) work!
+    res = cli.main(["color", "aurora", "--fast"])
+    assert res == 0
+    transport.read_state.assert_not_called()
