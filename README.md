@@ -169,6 +169,7 @@ Comprehensive guides are available in the repository `docs/` directory and on th
 * **[Protocol Specification](docs/PROTOCOL.md)**: Wire protocol specification, CBOR property maps, GATT layout, and hardware timing.
 * **[Integration & Scene Building Guide](docs/INTEGRATION_AND_SCENES.md)**: Python library integration, device settings API, and custom dynamic scene synthesis (`build_dydata`).
 * **[CLI Reference](docs/CLI_REFERENCE.md)**: Complete command-line interface reference and `--fast` performance options.
+* **[Troubleshooting, FAQ & Home Automation](docs/TROUBLESHOOTING_AND_FAQ.md)**: Platform Bluetooth setup (Linux, macOS, Windows), Home Assistant integration, systemd service units, and FAQ.
 
 ---
 

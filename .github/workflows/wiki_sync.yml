@@ -32,6 +32,7 @@ jobs:
           cp docs/PROTOCOL.md wiki/Protocol-Specification.md
           cp docs/INTEGRATION_AND_SCENES.md wiki/Integration-and-Scenes.md
           cp docs/CLI_REFERENCE.md wiki/CLI-Reference.md
+          cp docs/TROUBLESHOOTING_AND_FAQ.md wiki/Troubleshooting-and-FAQ.md
 
           # Generate Home.md
           cat << 'EOF' > wiki/Home.md
@@ -48,12 +49,13 @@ jobs:
           - **[[Protocol Specification|Protocol-Specification]]**: Wire protocol specification, CBOR property maps, GATT layout, and firmware quirks.
           - **[[Integration and Scenes|Integration-and-Scenes]]**: Developer guide for Python library integration, device settings API, and custom dynamic scene synthesis (`build_dydata`).
           - **[[CLI Reference|CLI-Reference]]**: Complete `glowctl` command-line reference and `--fast` performance options.
+          - **[[Troubleshooting and FAQ|Troubleshooting-and-FAQ]]**: Platform Bluetooth permissions (Linux, macOS, Windows), Home Assistant integration, systemd service units, and FAQ.
 
           ---
 
           ## Hardware Architecture Summary
 
-          * **Target Device**: Glowrium-C045 (ESP32 SoC)
+          * **Target Device**: Glowrium H4 / Glowrium-C045 (ESP32 SoC)
           * **Lighting Array**: 20 vertically addressable segments, 4-channel per-segment RGBY emitters (Red, Green, Blue, Yellow).
           * **BLE Service**: GATT Service `facebd00-7261-6262-6974-696f74626c65` (Write: `facebd01`, Read/Notify: `facebd02`).
 
@@ -70,6 +72,7 @@ jobs:
           * **[[Protocol Specification|Protocol-Specification]]**
           * **[[Integration and Scenes|Integration-and-Scenes]]**
           * **[[CLI Reference|CLI-Reference]]**
+          * **[[Troubleshooting and FAQ|Troubleshooting-and-FAQ]]**
           EOF
 
       - name: Commit and Push to Wiki
