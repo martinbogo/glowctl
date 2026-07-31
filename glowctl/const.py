@@ -346,23 +346,26 @@ PROPERTIES: dict[int, Property] = {p.key: p for p in [
 # Keys the device's own table declares but which no state read has ever
 # returned. The read truncates at 738 bytes, and these fall past the cut.
 #
-# The truncation is device-side and cannot be fixed from the central.
+# The truncation is imposed by the HOST BLUETOOTH STACK, not by the device, and
+# the cut-off differs by platform:
 #
-# The negotiated ATT_MTU is 247, measured AFTER service discovery. Reading it
-# in didConnect returns 23, the pre-negotiation default, and an earlier version
-# of this comment recorded that wrong value and built a wrong explanation on
-# it. Notifications of 128 bytes, impossible at MTU 23, are what exposed the
-# error.
+#   macOS   CoreBluetooth   738 bytes   22 properties
+#   Linux   BlueZ           512 bytes   20 properties
 #
-# At MTU 247 a read fetches 246 bytes per PDU and 738 = 3 * 246 exactly. The
-# device serves three full PDUs and then stops, while its CBOR header declares
-# 28 pairs and only 22 arrive. So the device's attribute is capped at 738 bytes
-# regardless of how much its encoder produced. Why 738 specifically is
-# unknown; it is a firmware-side buffer limit.
+# 512 is the maximum attribute value length in the Bluetooth spec, so BlueZ is
+# spec-correct and CoreBluetooth reads past it. An earlier version of this
+# comment called 738 a device-side cap; that was a macOS artefact. How much the
+# device would actually serve is unknown, since no host observed here reads
+# past its own limit.
+#
+# Consequence: NEVER_READ below is the macOS set. On Linux, keys 41 and 42
+# (GTimeDat2, GTimeDat3) also fall past the cut. Treat it as "not guaranteed to
+# be readable" rather than an absolute, and never assume a key is absent from
+# the device merely because a read did not return it.
 #
 # WORKAROUND: writes are echoed back as notifications, and those notifications
-# carry properties the read path never delivers. Six of the eight have been
-# reached this way: 4, 40, 62, 63, 65 and 79.
+# carry properties the read path never delivers, on every platform. Six of the
+# eight have been reached this way: 4, 40, 62, 63, 65 and 79.
 #
 # The echo is NOT universal. baseAd (7) and extra (125) accept writes without
 # error and produce no notification at all, so their content remains

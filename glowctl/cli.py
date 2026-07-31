@@ -388,7 +388,7 @@ async def cmd_timers(args) -> int:
             raw = state.get(key)
             if not isinstance(raw, bytes):
                 print(f"  slot {slot} (key {key:>2}): not returned by a read "
-                      f"(past the 738-byte truncation)")
+                      f"(past the read truncation; the cut-off is set by the host\n                      Bluetooth stack and differs by platform)")
                 continue
             p = protocol.parse_timer_slot(raw)
             state_str = "enabled" if p["enabled"] else "disabled"
