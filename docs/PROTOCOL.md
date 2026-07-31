@@ -202,11 +202,18 @@ Because dynamic types rewrite type-specific header parameters, custom animation 
 
 ### 5.1 Response Truncation Dynamics
 
-State reads on characteristic `facebd02` return a maximum payload of **738 bytes**. Although the CBOR property map header declares 28 key-value pairs, only 22 pairs are returned in a standard read payload.
+State reads on characteristic `facebd02` are truncated: the CBOR map header declares 28 key-value pairs, but fewer are returned. **The cut-off is imposed by the host Bluetooth stack, not by the device**, and it differs by platform:
 
-* **MTU Allocation**: Under standard BLE negotiation (ATT_MTU = 247), each GATT read PDU yields up to 246 payload bytes. The firmware limits multi-PDU read responses to 3 PDUs (3 x 246 = 738 bytes).
-* **Timing & Service Discovery**: ATT_MTU negotiation completes after GATT service discovery. Measuring payload limits prematurely inside `didConnect` yields pre-negotiation defaults (23 bytes).
-* **Firmware Limit**: The 738-byte boundary is enforced in device firmware and cannot be expanded by central MTU renegotiation.
+| Host | Stack | Bytes returned | Pairs decoded |
+|---|---|---|---|
+| macOS | CoreBluetooth | 738 | 22 |
+| Linux | BlueZ | 512 | 20 |
+
+* **Specification Limit**: 512 bytes is the maximum attribute value length defined by the Bluetooth specification. BlueZ enforces it; CoreBluetooth reads past it.
+* **MTU Allocation**: On macOS the negotiated ATT_MTU is 247, giving 246 payload bytes per read PDU, and 738 = 3 x 246.
+* **Timing & Service Discovery**: ATT_MTU negotiation completes after GATT service discovery. Measuring payload limits prematurely inside `didConnect` yields the pre-negotiation default (23 bytes).
+* **Not a firmware limit**: an earlier revision of this document described 738 bytes as a device-side cap. That was a macOS artefact. How much the device would serve to a host willing to read further is unknown, because no host tested exceeds its own limit.
+* **Platform-dependent key set**: the list of unreadable keys is therefore not a property of the device. Linux additionally loses keys `41` and `42` (`GTimeDat2`, `GTimeDat3`), which macOS returns. Treat `NEVER_READ` as "not guaranteed readable" rather than as a statement about the lamp.
 
 ---
 
@@ -218,7 +225,7 @@ Property writes transmitted to `facebd01` trigger an automatic notification echo
 {84: <timestamp>, 79: [1, 23400, 72900], 65: "06 01 11 28"}
 ```
 
-* **State Verification**: For unreadable properties located past the 738-byte read truncation boundary (such as keys 4, 40, 62, 63, 65, and 79), the notification echo acts as the primary hardware verification channel.
+* **State Verification**: For unreadable properties located past the read truncation boundary (such as keys 4, 40, 62, 63, 65, and 79), the notification echo acts as the primary hardware verification channel.
 * **Echo Behavior**:
   - **Echo-Supported Keys**: Keys `4`, `40`, `62`, `63`, `65`, and `79` echo property updates upon writing.
   - **Silent Keys**: Keys `7` (`baseAd`) and `125` (`extra`) acknowledge GATT writes without emitting notification echoes.
